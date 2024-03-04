@@ -11,8 +11,13 @@ window.onload = function () {
   let userSeq = [];
   let colors = ["red", "green", "yellow", "blue"];
 
-  // playthe game
-  play.addEventListener("click", levelUp);
+  // for win and game over
+
+  // play the game
+  play.addEventListener("click", function () {
+    play.classList.add("unclickable");
+    levelUp();
+  });
 
   function flashCell(btn) {
     btn.classList.remove("inactive");
@@ -37,6 +42,10 @@ window.onload = function () {
     gameSeq.push(randomColor);
     board.classList.remove("unclickable");
     flashCell(randomBtn);
+    for (color of gameSeq) {
+      let audio = new Audio(`../sounds/${color}.mp3`);
+      audio.play();
+    }
   }
 
   let buttons = document.querySelectorAll(".tile");
@@ -59,18 +68,32 @@ window.onload = function () {
     if (userSeq[id] === gameSeq[id]) {
       if (userSeq.length == gameSeq.length) {
         setTimeout(levelUp, 400);
-        highScore.innerText++;
-        if (highScore == 12) {
+        if (level.innerText == 12) {
+          let audio = new Audio("../sounds/game-win.wav");
+          audio.play();
+
+          setTimeout(restart, 2000);
         }
-      } else {
-        restart();
       }
+    } else {
+      setTimeout(function () {
+        let audio = new Audio(`../sounds/game-over.wav`);
+        audio.play();
+      }, 100);
+      endGame();
     }
+  }
+
+  function endGame() {
+    let audio = new Audio("../sounds/wrong.mp3");
+    audio.play();
+    restart();
   }
 
   function restart() {
     userSeq = [];
     gameSeq = [];
     level.innerText = 0;
+    play.classList.remove("unclickable");
   }
 };
