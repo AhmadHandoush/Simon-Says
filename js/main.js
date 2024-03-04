@@ -5,13 +5,11 @@ window.onload = function () {
   let level = document.getElementById("level");
   let board = document.querySelector(".board");
 
-  let simonSays = Math.floor(Math.random() * 12);
+  let high = 0;
 
   let gameSeq = [];
   let userSeq = [];
   let colors = ["red", "green", "yellow", "blue"];
-
-  // for win and game over
 
   // play the game
   play.addEventListener("click", function () {
@@ -36,6 +34,8 @@ window.onload = function () {
   function levelUp() {
     userSeq = [];
     level.innerText++;
+    high++;
+
     let randomNumber = Math.floor(Math.random() * 4);
     let randomColor = colors[randomNumber];
     let randomBtn = document.querySelector(`.${randomColor}`);
@@ -95,5 +95,11 @@ window.onload = function () {
     gameSeq = [];
     level.innerText = 0;
     play.classList.remove("unclickable");
+    window.localStorage.setItem("higher-score", high);
+    getHighScore();
+  }
+  function getHighScore() {
+    let higher = localStorage.getItem("higher-score");
+    highScore.innerText = higher;
   }
 };
